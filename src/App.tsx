@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {useSnakeMove} from "./hooks/snake-move";
+import {SnakeList} from "./snake";
+
 
 function App() {
+  const height = 10;
+  const width = 10;
+  const snake = new SnakeList(1, 2);
+  snake.push(1, 1)
+  const fields: any[] = useSnakeMove(height, width, snake);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        fields.map((row: any, i: number) =>
+          <div key={i}>{row.map((cell: any, j: number) => <span key={j}>{cell}&nbsp;</span>
+          )}</div>
+        )
+      }
     </div>
   );
 }
