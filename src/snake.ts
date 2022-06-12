@@ -23,22 +23,25 @@ export class SnakeList {
     this.size = 1;
   }
 
-  push(i: number, j: number) {
+  move(i: number, j: number, addNode: boolean = false): SnakeNode | undefined {
     const newNode = new SnakeNode(i, j, this.size > 1 ? this.head : null);
     this.head.prev = this.size > 1 ? newNode : null;
     this.head = newNode;
     if (this.size === 1)
       this.tail.prev = newNode;
-    this.size += 1;
+    if (addNode)
+      this.size += 1;
 
-    this.pop();
+    return addNode ? undefined : this.pop();
   }
 
   pop() {
-    if (this.size > 2 && this.tail.prev) {
+    if (this.tail.prev) {
+      const oldTail = this.tail;
       const prevNode = this.tail.prev;
       this.tail = prevNode;
       prevNode.next = null;
+      return oldTail;
     }
   }
 }
