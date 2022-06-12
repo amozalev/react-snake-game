@@ -16,13 +16,9 @@ export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500
   const key = useSnakeMove();
 
   useEffect(() => {
-    let i: any;
-    let j: any;
-    while (true) {
+    let [i, j] = getNewNodeCoords(height, width);
+    while (fields[i][j] !== 'o') {
       [i, j] = getNewNodeCoords(height, width);
-      if (fields[i][j] === 'o') {
-        break;
-      }
     }
     const fieldsCopy = _.cloneDeep(fields);
     fieldsCopy[i][j] = 'H';
