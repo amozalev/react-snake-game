@@ -17,7 +17,7 @@ export const getNextSnakeCoordsByKey = (height: number, width: number, key: stri
   let i = 0, j = 0;
   switch (key) {
     case 'ArrowUp':
-      i = (snake.head.m - 1) % height;
+      i = (snake.head.m - 1 + height) % height;
       j = snake.head.n;
       break;
     case 'ArrowDown':
