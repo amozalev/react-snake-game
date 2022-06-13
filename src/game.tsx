@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import * as _ from 'lodash';
-import {createInitFields, getNewSnakeNodeCoords, getNextSnakeCoordsByKey} from "./utils";
+import {CELLS, createInitCells, getNewSnakeNodeCoords, getNextSnakeCoordsByKey} from "./utils";
 import {SnakeList} from "./snake";
 import {useKeyboardEvent} from "./hooks/keyboard-event";
 
@@ -12,37 +12,36 @@ type GameProps = {
 }
 
 export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500}) => {
-  const [fields, setFields] = useState(createInitFields(height, width));
+  const [cells, setCells] = useState(createInitCells(height, width));
   const key = useKeyboardEvent();
 
   useEffect(() => {
     let [i, j] = getNewSnakeNodeCoords(height, width);
-    while (fields[i][j] !== 'o') {
+    while (cells[i][j] !== CELLS.EMPTY) {
       [i, j] = getNewSnakeNodeCoords(height, width);
     }
-    const fieldsCopy = _.cloneDeep(fields);
-    fieldsCopy[i][j] = 'H';
-    setFields(fieldsCopy);
+    const cellsCopy = _.cloneDeep(cells);
+    cellsCopy[i][j] = CELLS.FOOD;
+    setCells(cellsCopy);
   }, [snake.size])
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (key) {
         const [i, j] = getNextSnakeCoordsByKey(height, width, key, snake);
-        const addNew = fields[i][j] === 'H';
-        const popped = snake.move(i, j, addNew);
+        const popped = snake.move(i, j, cells[i][j] === CELLS.FOOD);
 
-        setFields(prevFields => {
-          const fieldsCopy = _.cloneDeep(prevFields);
+        setCells(prevCells => {
+          const cellsCopy = _.cloneDeep(prevCells);
 
           if (popped)
-            fieldsCopy[popped.m][popped.n] = 'o';
+            cellsCopy[popped.m][popped.n] = CELLS.EMPTY;
           let curNode = snake.head;
           while (curNode) {
-            fieldsCopy[curNode.m][curNode.n] = 'X'
+            cellsCopy[curNode.m][curNode.n] = CELLS.SNAKE
             curNode = curNode.next;
           }
-          return fieldsCopy;
+          return cellsCopy;
         });
       }
     }, gameSpeed)
@@ -52,7 +51,7 @@ export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500
   return (
     <div>
       {
-        fields.map((row: any, i: number) =>
+        cells.map((row: any, i: number) =>
           <div key={i}>{row.map((cell: any, j: number) => <span key={j}>{cell}&nbsp;</span>
           )}</div>
         )

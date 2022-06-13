@@ -1,7 +1,13 @@
 import {SnakeList} from "./snake";
 
-export const createInitFields = (height: number, width: number) =>
-  Array(height).fill([]).map(row => row = Array(width).fill('o'))
+export enum CELLS {
+  EMPTY = 'o',
+  SNAKE = 'X',
+  FOOD = 'H'
+}
+
+export const createInitCells = (height: number, width: number) =>
+  Array(height).fill([]).map(row => row = Array(width).fill(CELLS.EMPTY))
 
 
 export const getNewSnakeNodeCoords = (height: number, width: number) =>
@@ -20,7 +26,7 @@ export const getNextSnakeCoordsByKey = (height: number, width: number, key: stri
       break;
     case 'ArrowLeft':
       i = snake.head.m;
-      j = (snake.head.n - 1) % width;
+      j = (snake.head.n - 1 + width) % width;
       break;
     case 'ArrowRight':
       i = snake.head.m;
