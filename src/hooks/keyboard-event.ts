@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 
-export const useSnakeMove = () => {
-  const [key, setKey] = useState();
+export const useKeyboardEvent = () => {
+  const [key, setKey] = useState<string>();
 
   useEffect(() => {
       const handleSnakeMove = (event: any) => {

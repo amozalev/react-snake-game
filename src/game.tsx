@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import * as _ from 'lodash';
-import {createInitFields, getNewNodeCoords} from "./utils";
+import {createInitFields, getNewSnakeNodeCoords, getNextSnakeCoordsByKey} from "./utils";
 import {SnakeList} from "./snake";
-import {useSnakeMove} from "./hooks/snake-move";
+import {useKeyboardEvent} from "./hooks/keyboard-event";
 
 type GameProps = {
   height: number,
@@ -13,12 +13,12 @@ type GameProps = {
 
 export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500}) => {
   const [fields, setFields] = useState(createInitFields(height, width));
-  const key = useSnakeMove();
+  const key = useKeyboardEvent();
 
   useEffect(() => {
-    let [i, j] = getNewNodeCoords(height, width);
+    let [i, j] = getNewSnakeNodeCoords(height, width);
     while (fields[i][j] !== 'o') {
-      [i, j] = getNewNodeCoords(height, width);
+      [i, j] = getNewSnakeNodeCoords(height, width);
     }
     const fieldsCopy = _.cloneDeep(fields);
     fieldsCopy[i][j] = 'H';
@@ -28,25 +28,7 @@ export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500
   useEffect(() => {
     const interval = setInterval(() => {
       if (key) {
-        let i = 0, j = 0;
-        switch (key) {
-          case 'ArrowUp':
-            i = (snake.head.m - 1) % height;
-            j = snake.head.n;
-            break;
-          case 'ArrowDown':
-            i = (snake.head.m + 1) % height;
-            j = snake.head.n
-            break;
-          case 'ArrowLeft':
-            i = snake.head.m;
-            j = (snake.head.n - 1) % width;
-            break;
-          case 'ArrowRight':
-            i = snake.head.m;
-            j = (snake.head.n + 1) % width;
-            break;
-        }
+        const [i, j] = getNextSnakeCoordsByKey(height, width, key, snake);
         const addNew = fields[i][j] === 'H';
         const popped = snake.move(i, j, addNew);
 
@@ -62,14 +44,10 @@ export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500
           }
           return fieldsCopy;
         });
-
-
       }
-
     }, gameSpeed)
     return () => clearInterval(interval)
   }, [key])
-
 
   return (
     <div>
