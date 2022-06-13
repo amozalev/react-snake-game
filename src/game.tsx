@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {CELLS, createInitCells, getNewSnakeNodeCoords, getNextSnakeCoordsByKey} from "./utils";
 import {SnakeList} from "./snake";
 import {useKeyboardEvent} from "./hooks/keyboard-event";
+import {Cells} from "./components/cells";
 
 type GameProps = {
   height: number,
@@ -48,14 +49,5 @@ export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500
     return () => clearInterval(interval)
   }, [key])
 
-  return (
-    <div>
-      {
-        cells.map((row: any, i: number) =>
-          <div key={i}>{row.map((cell: any, j: number) => <span key={j}>{cell}&nbsp;</span>
-          )}</div>
-        )
-      }
-    </div>
-  );
+  return <Cells cells={cells}/>
 }
