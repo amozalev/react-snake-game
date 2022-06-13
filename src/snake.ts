@@ -44,4 +44,14 @@ export class SnakeList {
       return oldTail;
     }
   }
+
+  isCellInSnake(coordY: number, coordX: number): boolean {
+    let curNode = this.head;
+    while (curNode) {
+      if (curNode.coordY === coordY && curNode.coordX === coordX)
+        return true;
+      curNode = curNode.next;
+    }
+    return false;
+  }
 }

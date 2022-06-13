@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 import * as _ from 'lodash';
 import {CELLS, createInitCells, getRandomCellCoords, getNextSnakeCoordsByKey} from "./utils";
 import {SnakeList} from "./snake";
@@ -9,9 +9,10 @@ type GameProps = {
   gameHeight: number,
   gameWidth: number,
   gameSpeed?: number
+  restartGame: Dispatch<SetStateAction<number>>
 }
 
-export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 500}) => {
+export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 500, restartGame}) => {
   const [cells, setCells] = useState(createInitCells(gameHeight, gameWidth));
   const key = useKeyboardEvent();
 
@@ -39,6 +40,11 @@ export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 50
     const interval = setInterval(() => {
       if (key) {
         const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(gameHeight, gameWidth, key, snake);
+        if (snake.isCellInSnake(nextCoordY, nextCoordX)) {
+          stopGame();
+          clearInterval(interval)
+          restartGame((prevKey: number) => prevKey + 1);
+        }
         const poppedNode = snake.move(nextCoordY, nextCoordX, cells[nextCoordY][nextCoordX] === CELLS.FOOD);
 
         setCells(prevCells => {
@@ -57,6 +63,10 @@ export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 50
     }, gameSpeed)
     return () => clearInterval(interval)
   }, [key])
+
+  const stopGame = () => {
+    alert('You loose!');
+  }
 
   return <Cells cells={cells}/>
 }
