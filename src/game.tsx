@@ -52,11 +52,7 @@ export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 50
 
           if (poppedNode)
             cellsCopy[poppedNode.coordY][poppedNode.coordX] = CELLS.EMPTY;
-          let curNode = snake.head;
-          while (curNode) {
-            cellsCopy[curNode.coordY][curNode.coordX] = CELLS.SNAKE
-            curNode = curNode.next;
-          }
+          cellsCopy[nextCoordY][nextCoordX] = CELLS.SNAKE;
           return cellsCopy;
         });
       }
