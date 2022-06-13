@@ -1,12 +1,12 @@
 export class SnakeNode {
-  m: number;
-  n: number;
+  coordY: number;
+  coordX: number;
   next: any;
   prev: any;
 
-  constructor(m: number, n: number, next: any = undefined, prev: any = undefined) {
-    this.m = m;
-    this.n = n;
+  constructor(coordY: number, coordX: number, next: any = undefined, prev: any = undefined) {
+    this.coordY = coordY;
+    this.coordX = coordX;
     this.next = next;
     this.prev = prev;
   }

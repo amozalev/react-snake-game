@@ -20,7 +20,7 @@ export const Game: React.FC<GameProps> = ({fieldHeight, fieldWidth, gameSpeed = 
 
   useEffect(() => {
     setCells(prevCells => {
-      prevCells[snake.head.m][snake.head.n] = CELLS.SNAKE;
+      prevCells[snake.head.coordY][snake.head.coordX] = CELLS.SNAKE;
       return [...prevCells]
     })
   }, [])
@@ -38,17 +38,17 @@ export const Game: React.FC<GameProps> = ({fieldHeight, fieldWidth, gameSpeed = 
   useEffect(() => {
     const interval = setInterval(() => {
       if (key) {
-        const [snakeCoordY, snakeCoordX] = getNextSnakeCoordsByKey(fieldHeight, fieldWidth, key, snake);
-        const popped = snake.move(snakeCoordY, snakeCoordX, cells[snakeCoordY][snakeCoordX] === CELLS.FOOD);
+        const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(fieldHeight, fieldWidth, key, snake);
+        const poppedNode = snake.move(nextCoordY, nextCoordX, cells[nextCoordY][nextCoordX] === CELLS.FOOD);
 
         setCells(prevCells => {
           const cellsCopy = _.cloneDeep(prevCells);
 
-          if (popped)
-            cellsCopy[popped.m][popped.n] = CELLS.EMPTY;
+          if (poppedNode)
+            cellsCopy[poppedNode.coordY][poppedNode.coordX] = CELLS.EMPTY;
           let curNode = snake.head;
           while (curNode) {
-            cellsCopy[curNode.m][curNode.n] = CELLS.SNAKE
+            cellsCopy[curNode.coordY][curNode.coordX] = CELLS.SNAKE
             curNode = curNode.next;
           }
           return cellsCopy;

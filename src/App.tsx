@@ -4,8 +4,8 @@ import {Game} from "./game";
 
 
 function App() {
-  const height = 30;
-  const width = 30;
+  const height = 10;
+  const width = 10;
   const gameSpeed = 100;
 
   return <Game fieldHeight={height} fieldWidth={width} gameSpeed={gameSpeed}/>
