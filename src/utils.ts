@@ -10,7 +10,7 @@ export const createInitCells = (height: number, width: number) =>
   Array(height).fill([]).map(row => row = Array(width).fill(CELLS.EMPTY))
 
 
-export const getNewSnakeNodeCoords = (height: number, width: number) =>
+export const getRandomCellCoords = (height: number, width: number): [number, number] =>
   [Math.floor(Math.random() * height), Math.floor(Math.random() * width)]
 
 export const getNextSnakeCoordsByKey = (height: number, width: number, key: string, snake: SnakeList) => {

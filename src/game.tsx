@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as _ from 'lodash';
-import {CELLS, createInitCells, getNewSnakeNodeCoords, getNextSnakeCoordsByKey} from "./utils";
+import {CELLS, createInitCells, getRandomCellCoords, getNextSnakeCoordsByKey} from "./utils";
 import {SnakeList} from "./snake";
 import {useKeyboardEvent} from "./hooks/keyboard-event";
 import {Cells} from "./components/cells";
@@ -8,18 +8,27 @@ import {Cells} from "./components/cells";
 type GameProps = {
   height: number,
   width: number,
-  snake: SnakeList
   gameSpeed?: number
 }
 
-export const Game: React.FC<GameProps> = ({height, width, snake, gameSpeed = 500}) => {
+export const Game: React.FC<GameProps> = ({height, width, gameSpeed = 500}) => {
   const [cells, setCells] = useState(createInitCells(height, width));
   const key = useKeyboardEvent();
 
+  let snakeRef = useRef<SnakeList>(new SnakeList(...getRandomCellCoords(height, width)));
+  const snake = snakeRef.current;
+
   useEffect(() => {
-    let [i, j] = getNewSnakeNodeCoords(height, width);
+    setCells(prevCells => {
+      prevCells[snake.head.m][snake.head.n] = CELLS.SNAKE;
+      return [...prevCells]
+    })
+  }, [])
+
+  useEffect(() => {
+    let [i, j] = getRandomCellCoords(height, width);
     while (cells[i][j] !== CELLS.EMPTY) {
-      [i, j] = getNewSnakeNodeCoords(height, width);
+      [i, j] = getRandomCellCoords(height, width);
     }
     const cellsCopy = _.cloneDeep(cells);
     cellsCopy[i][j] = CELLS.FOOD;
