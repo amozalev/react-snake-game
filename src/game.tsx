@@ -26,20 +26,20 @@ export const Game: React.FC<GameProps> = ({fieldHeight, fieldWidth, gameSpeed = 
   }, [])
 
   useEffect(() => {
-    let [i, j] = getRandomCellCoords(fieldHeight, fieldWidth);
-    while (cells[i][j] !== CELLS.EMPTY) {
-      [i, j] = getRandomCellCoords(fieldHeight, fieldWidth);
+    let [foodCoordY, foodCoordX] = getRandomCellCoords(fieldHeight, fieldWidth);
+    while (cells[foodCoordY][foodCoordX] !== CELLS.EMPTY) {
+      [foodCoordY, foodCoordX] = getRandomCellCoords(fieldHeight, fieldWidth);
     }
     const cellsCopy = _.cloneDeep(cells);
-    cellsCopy[i][j] = CELLS.FOOD;
+    cellsCopy[foodCoordY][foodCoordX] = CELLS.FOOD;
     setCells(cellsCopy);
   }, [snake.size])
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (key) {
-        const [i, j] = getNextSnakeCoordsByKey(fieldHeight, fieldWidth, key, snake);
-        const popped = snake.move(i, j, cells[i][j] === CELLS.FOOD);
+        const [snakeCoordY, snakeCoordX] = getNextSnakeCoordsByKey(fieldHeight, fieldWidth, key, snake);
+        const popped = snake.move(snakeCoordY, snakeCoordX, cells[snakeCoordY][snakeCoordX] === CELLS.FOOD);
 
         setCells(prevCells => {
           const cellsCopy = _.cloneDeep(prevCells);

@@ -14,24 +14,24 @@ export const getRandomCellCoords = (height: number, width: number): [number, num
   [Math.floor(Math.random() * height), Math.floor(Math.random() * width)]
 
 export const getNextSnakeCoordsByKey = (fieldHeight: number, fieldWidth: number, key: string, snake: SnakeList) => {
-  let i = 0, j = 0;
+  let coordY = 0, coordX = 0;
   switch (key) {
     case 'ArrowUp':
-      i = (snake.head.m - 1 + fieldHeight) % fieldHeight;
-      j = snake.head.n;
+      coordY = (snake.head.m - 1 + fieldHeight) % fieldHeight;
+      coordX = snake.head.n;
       break;
     case 'ArrowDown':
-      i = (snake.head.m + 1) % fieldHeight;
-      j = snake.head.n
+      coordY = (snake.head.m + 1) % fieldHeight;
+      coordX = snake.head.n
       break;
     case 'ArrowLeft':
-      i = snake.head.m;
-      j = (snake.head.n - 1 + fieldWidth) % fieldWidth;
+      coordY = snake.head.m;
+      coordX = (snake.head.n - 1 + fieldWidth) % fieldWidth;
       break;
     case 'ArrowRight':
-      i = snake.head.m;
-      j = (snake.head.n + 1) % fieldWidth;
+      coordY = snake.head.m;
+      coordX = (snake.head.n + 1) % fieldWidth;
       break;
   }
-  return [i, j]
+  return [coordY, coordX]
 }

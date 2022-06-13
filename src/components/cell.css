@@ -1,6 +1,6 @@
 .cell {
-    height: 2em;
-    width: 2em;
+    height: 10px;
+    width: 10px;
     text-align: center;
     border: 1px solid red;
 }

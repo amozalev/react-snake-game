@@ -17,14 +17,14 @@ export class SnakeList {
   tail: SnakeNode;
   size: number;
 
-  constructor(i: number, j: number) {
-    this.head = new SnakeNode(i, j);
+  constructor(coordY: number, coordX: number) {
+    this.head = new SnakeNode(coordY, coordX);
     this.tail = this.head;
     this.size = 1;
   }
 
-  move(i: number, j: number, addNewNode: boolean = false): SnakeNode | undefined {
-    const newNode = new SnakeNode(i, j, this.size > 1 ? this.head : null);
+  move(coordY: number, coordX: number, addNewNode: boolean = false): SnakeNode | undefined {
+    const newNode = new SnakeNode(coordY, coordX, this.size > 1 ? this.head : null);
     this.head.prev = this.size > 1 ? newNode : null;
     this.head = newNode;
     if (this.size === 1)
