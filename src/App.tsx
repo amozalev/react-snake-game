@@ -8,7 +8,7 @@ function App() {
   const width = 10;
   const gameSpeed = 500;
 
-  return <Game height={height} width={width} gameSpeed={gameSpeed}/>
+  return <Game fieldHeight={height} fieldWidth={width} gameSpeed={gameSpeed}/>
 }
 
 export default App;
