@@ -6,16 +6,16 @@ import {useKeyboardEvent} from "./hooks/keyboard-event";
 import {Cells} from "./components/cells";
 
 type GameProps = {
-  fieldHeight: number,
-  fieldWidth: number,
+  gameHeight: number,
+  gameWidth: number,
   gameSpeed?: number
 }
 
-export const Game: React.FC<GameProps> = ({fieldHeight, fieldWidth, gameSpeed = 500}) => {
-  const [cells, setCells] = useState(createInitCells(fieldHeight, fieldWidth));
+export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 500}) => {
+  const [cells, setCells] = useState(createInitCells(gameHeight, gameWidth));
   const key = useKeyboardEvent();
 
-  let snakeRef = useRef<SnakeList>(new SnakeList(...getRandomCellCoords(fieldHeight, fieldWidth)));
+  let snakeRef = useRef<SnakeList>(new SnakeList(...getRandomCellCoords(gameHeight, gameWidth)));
   const snake = snakeRef.current;
 
   useEffect(() => {
@@ -26,9 +26,9 @@ export const Game: React.FC<GameProps> = ({fieldHeight, fieldWidth, gameSpeed = 
   }, [])
 
   useEffect(() => {
-    let [foodCoordY, foodCoordX] = getRandomCellCoords(fieldHeight, fieldWidth);
+    let [foodCoordY, foodCoordX] = getRandomCellCoords(gameHeight, gameWidth);
     while (cells[foodCoordY][foodCoordX] !== CELLS.EMPTY) {
-      [foodCoordY, foodCoordX] = getRandomCellCoords(fieldHeight, fieldWidth);
+      [foodCoordY, foodCoordX] = getRandomCellCoords(gameHeight, gameWidth);
     }
     const cellsCopy = _.cloneDeep(cells);
     cellsCopy[foodCoordY][foodCoordX] = CELLS.FOOD;
@@ -38,7 +38,7 @@ export const Game: React.FC<GameProps> = ({fieldHeight, fieldWidth, gameSpeed = 
   useEffect(() => {
     const interval = setInterval(() => {
       if (key) {
-        const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(fieldHeight, fieldWidth, key, snake);
+        const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(gameHeight, gameWidth, key, snake);
         const poppedNode = snake.move(nextCoordY, nextCoordX, cells[nextCoordY][nextCoordX] === CELLS.FOOD);
 
         setCells(prevCells => {
