@@ -1,5 +1,6 @@
 import React from 'react';
 import {Cell} from "./cell";
+import './cells.css'
 
 interface CellsProps {
   cells: (string | number)[][];
@@ -7,10 +8,12 @@ interface CellsProps {
 
 export const Cells: React.FC<CellsProps> = ({cells}) => {
   return (
-    <div>
+    <div className='cells_container'>
       {
         cells.map((row: (string | number)[], i: number) =>
-          <div key={i}>{row.map((cell: string | number, j: number) => <Cell key={j} char={cell}/>)}</div>
+          <div className='row' key={i}>
+            {row.map((cell: string | number, j: number) => <Cell key={j} char={cell}/>)}
+          </div>
         )
       }
     </div>
