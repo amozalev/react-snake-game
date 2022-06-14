@@ -1,6 +1,6 @@
 import React from 'react';
 import './cell.css';
-import {CELLS} from "../utils";
+import {CELLS} from "../utils/utils";
 
 interface CellProps {
   char: string | number;

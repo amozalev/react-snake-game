@@ -6,10 +6,10 @@ import {
   getNextSnakeCoordsByKey,
   ALLOWED_KEYS,
   createFoodCell
-} from "./utils";
+} from "../utils/utils";
 import {SnakeList} from "./snake";
-import {useKeyboardEvent} from "./hooks/keyboard-event";
-import {Cells} from "./components/cells";
+import {useKeyboardEvent} from "../hooks/keyboard-event";
+import {Cells} from "./cells";
 
 type GameProps = {
   gameHeight: number,

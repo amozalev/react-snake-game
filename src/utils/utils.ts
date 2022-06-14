@@ -1,4 +1,4 @@
-import {SnakeList} from "./snake";
+import {SnakeList} from "../components/snake";
 
 export enum CELLS {
   EMPTY = 'o',
