@@ -3,7 +3,7 @@ import {SnakeList} from "./snake";
 export enum CELLS {
   EMPTY = 'o',
   SNAKE = 'X',
-  FOOD = 'H'
+  FOOD = 'F'
 }
 
 export const ALLOWED_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])

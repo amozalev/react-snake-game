@@ -9,6 +9,14 @@
     background: grey;
 }
 
+.snakeDot {
+    height: 50%;
+    width: 50%;
+    background-color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+}
+
 .empty {
     background: #d5ecac;
 }
