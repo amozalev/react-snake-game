@@ -1,20 +1,22 @@
 .cell {
-    height: 20px;
-    width: 20px;
+    height: 30px;
+    width: 30px;
     text-align: center;
-    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: 1px solid grey;
 }
 
 .snake {
     background: grey;
 }
 
-.snakeDot {
-    height: 50%;
+.snakeRhumb {
     width: 50%;
+    height: 50%;
     background-color: #fff;
-    border-radius: 50%;
-    display: inline-block;
+    transform: rotate(67.5deg) skewX(45deg) scaleY(0.7);
 }
 
 .empty {
@@ -22,5 +24,16 @@
 }
 
 .food {
-    background: yellow;
+    background: #d5ecac;
+}
+
+.coin {
+    height: 90%;
+    width: 90%;
+    background-color: rgba(246, 136, 7, 0.95);
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

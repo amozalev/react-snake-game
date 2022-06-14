@@ -6,9 +6,9 @@ interface CellProps {
   char: string | number;
 }
 
-const snakeCell = <div className='snakeDot'></div>;
+const snakeCell = <div className='snakeRhumb'></div>;
 
-const foodCell = CELLS.FOOD;
+const foodCell = <div className='coin'>$</div>;
 
 export const Cell: React.FC<CellProps> = ({char}) => {
   let classname = '';
