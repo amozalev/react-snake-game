@@ -5,7 +5,8 @@ import {
   getRandomCellCoords,
   getNextSnakeCoordsByKey,
   ALLOWED_KEYS,
-  createFoodCell
+  createFoodCell,
+  GAME_MODE
 } from "../utils/utils";
 import {SnakeList} from "./snake";
 import {useKeyboardEvent} from "../hooks/keyboard-event";
@@ -16,9 +17,16 @@ type GameProps = {
   gameWidth: number,
   gameSpeed?: number
   restartGame: Dispatch<SetStateAction<number>>
+  gameMode?: GAME_MODE
 }
 
-export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 500, restartGame}) => {
+export const Game: React.FC<GameProps> = ({
+                                            gameHeight,
+                                            gameWidth,
+                                            gameSpeed = 500,
+                                            restartGame,
+                                            gameMode = GAME_MODE.HARD
+                                          }) => {
   const [cells, setCells] = useState(createInitCells(gameHeight, gameWidth));
   let keyRef = useRef<string | undefined>(useKeyboardEvent());
   let key = useKeyboardEvent();
@@ -38,9 +46,9 @@ export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 50
   useEffect(() => {
     const interval = setInterval(() => {
       if (keyRef.current && ALLOWED_KEYS.has(keyRef.current)) {
-        const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(gameHeight, gameWidth, keyRef.current, snake);
+        const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(gameHeight, gameWidth, keyRef.current, snake, gameMode);
 
-        checkIfLostGame(nextCoordY, nextCoordX, interval);
+        checkIfLostGame(nextCoordY, nextCoordX, gameHeight, gameWidth, interval);
 
         const isFoodCell = cells[nextCoordY][nextCoordX] === CELLS.FOOD
         const poppedNode = snake.move(nextCoordY, nextCoordX, isFoodCell);
@@ -58,10 +66,10 @@ export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 50
     return () => clearInterval(interval)
   }, [keyRef.current, cells])
 
-  const checkIfLostGame = (nextCoordY: number, nextCoordX: number, interval: NodeJS.Timer) => {
-    if (snake.isCellInSnake(nextCoordY, nextCoordX)) {
-      alert('You have lost!');
+  const checkIfLostGame = (nextCoordY: number, nextCoordX: number, gameHeight: number, gameWidth: number, interval: NodeJS.Timer) => {
+    if (snake.isCellInSnake(nextCoordY, nextCoordX) || nextCoordY < 0 || nextCoordY >= gameHeight || nextCoordX < 0 || nextCoordX >= gameWidth) {
       clearInterval(interval)
+      alert('You have lost!');
       restartGame((prevKey: number) => prevKey + 1);
     }
   }

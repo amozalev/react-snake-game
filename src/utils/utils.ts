@@ -6,6 +6,11 @@ export enum CELLS {
   FOOD = 'F'
 }
 
+export enum GAME_MODE {
+  EASY,
+  HARD
+}
+
 export const ALLOWED_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])
 
 export const createInitCells = (height: number, width: number) =>
@@ -23,24 +28,24 @@ export const createFoodCell = (gameHeight: number, gameWidth: number, cells: any
   return [foodCoordY, foodCoordX];
 }
 
-export const getNextSnakeCoordsByKey = (gameHeight: number, gameWidth: number, key: string, snake: SnakeList) => {
+export const getNextSnakeCoordsByKey = (gameHeight: number, gameWidth: number, key: string, snake: SnakeList, gameMode: GAME_MODE) => {
   let coordY = 0, coordX = 0;
   switch (key) {
     case 'ArrowUp':
-      coordY = (snake.head.coordY - 1 + gameHeight) % gameHeight;
+      coordY = gameMode === GAME_MODE.EASY ? (snake.head.coordY - 1 + gameHeight) % gameHeight : snake.head.coordY - 1;
       coordX = snake.head.coordX;
       break;
     case 'ArrowDown':
-      coordY = (snake.head.coordY + 1) % gameHeight;
+      coordY = gameMode === GAME_MODE.EASY ? (snake.head.coordY + 1) % gameHeight : snake.head.coordY + 1;
       coordX = snake.head.coordX
       break;
     case 'ArrowLeft':
       coordY = snake.head.coordY;
-      coordX = (snake.head.coordX - 1 + gameWidth) % gameWidth;
+      coordX = gameMode === GAME_MODE.EASY ? (snake.head.coordX - 1 + gameWidth) % gameWidth : snake.head.coordX - 1;
       break;
     case 'ArrowRight':
       coordY = snake.head.coordY;
-      coordX = (snake.head.coordX + 1) % gameWidth;
+      coordX = gameMode === GAME_MODE.EASY ? (snake.head.coordX + 1) % gameWidth : snake.head.coordX + 1;
       break;
   }
   return [coordY, coordX];
