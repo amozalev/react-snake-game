@@ -9,11 +9,11 @@ export enum CELLS {
 export const ALLOWED_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])
 
 export const createInitCells = (height: number, width: number) =>
-  Array(height).fill([]).map(row => row = Array(width).fill(CELLS.EMPTY))
+  Array(height).fill([]).map(row => row = Array(width).fill(CELLS.EMPTY));
 
 
 export const getRandomCellCoords = (height: number, width: number): [number, number] =>
-  [Math.floor(Math.random() * height), Math.floor(Math.random() * width)]
+  [Math.floor(Math.random() * height), Math.floor(Math.random() * width)];
 
 export const createFoodCell = (gameHeight: number, gameWidth: number, cells: any) => {
   let [foodCoordY, foodCoordX] = getRandomCellCoords(gameHeight, gameWidth);
@@ -43,5 +43,5 @@ export const getNextSnakeCoordsByKey = (gameHeight: number, gameWidth: number, k
       coordX = (snake.head.coordX + 1) % gameWidth;
       break;
   }
-  return [coordY, coordX]
+  return [coordY, coordX];
 }

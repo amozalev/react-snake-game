@@ -1,5 +1,4 @@
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
-import * as _ from 'lodash';
 import {
   CELLS,
   createInitCells,
@@ -21,11 +20,13 @@ type GameProps = {
 
 export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 500, restartGame}) => {
   const [cells, setCells] = useState(createInitCells(gameHeight, gameWidth));
+  let keyRef = useRef<string | undefined>(useKeyboardEvent());
   let key = useKeyboardEvent();
+  keyRef.current = key && ALLOWED_KEYS.has(key) ? key : keyRef.current;
 
   let snakeRef = useRef<SnakeList>(new SnakeList(...getRandomCellCoords(gameHeight, gameWidth)));
   const snake = snakeRef.current;
-  const foodRef = useRef(createFoodCell(gameHeight, gameWidth, cells))
+  const foodRef = useRef(createFoodCell(gameHeight, gameWidth, cells)) // used to create initial food only once => in strict mode Game rerenders twice during a mount
   const [initFoodCoordY, initFoodCoordX] = foodRef.current;
 
   useEffect(() => {
@@ -36,37 +37,33 @@ export const Game: React.FC<GameProps> = ({gameHeight, gameWidth, gameSpeed = 50
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (key && ALLOWED_KEYS.has(key)) {
-        const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(gameHeight, gameWidth, key, snake);
+      if (keyRef.current && ALLOWED_KEYS.has(keyRef.current)) {
+        const [nextCoordY, nextCoordX] = getNextSnakeCoordsByKey(gameHeight, gameWidth, keyRef.current, snake);
 
-        if (snake.isCellInSnake(nextCoordY, nextCoordX)) {
-          stopGame();
-          clearInterval(interval)
-          restartGame((prevKey: number) => prevKey + 1);
-        }
+        checkIfLostGame(nextCoordY, nextCoordX, interval);
 
         const isFoodCell = cells[nextCoordY][nextCoordX] === CELLS.FOOD
         const poppedNode = snake.move(nextCoordY, nextCoordX, isFoodCell);
 
-        setCells(prevCells => {
-          const cellsCopy = _.cloneDeep(prevCells);
-
-          if (poppedNode) {
-            cellsCopy[poppedNode.coordY][poppedNode.coordX] = CELLS.EMPTY;
-          } else {
-            const [foodCoordY, foodCoordX] = createFoodCell(gameHeight, gameWidth, cellsCopy);
-            cellsCopy[foodCoordY][foodCoordX] = CELLS.FOOD;
-          }
-          cellsCopy[nextCoordY][nextCoordX] = CELLS.SNAKE;
-          return cellsCopy;
-        });
+        if (poppedNode) {
+          cells[poppedNode.coordY][poppedNode.coordX] = CELLS.EMPTY;
+        } else {
+          const [foodCoordY, foodCoordX] = createFoodCell(gameHeight, gameWidth, cells);
+          cells[foodCoordY][foodCoordX] = CELLS.FOOD;
+        }
+        cells[nextCoordY][nextCoordX] = CELLS.SNAKE;
+        setCells([...cells]);
       }
     }, gameSpeed)
     return () => clearInterval(interval)
-  }, [key, cells])
+  }, [keyRef.current, cells])
 
-  const stopGame = () => {
-    alert('You loose!');
+  const checkIfLostGame = (nextCoordY: number, nextCoordX: number, interval: NodeJS.Timer) => {
+    if (snake.isCellInSnake(nextCoordY, nextCoordX)) {
+      alert('You have lost!');
+      clearInterval(interval)
+      restartGame((prevKey: number) => prevKey + 1);
+    }
   }
 
   return <Cells cells={cells}/>
