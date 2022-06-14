@@ -1,10 +1,10 @@
 export class SnakeNode {
   coordY: number;
   coordX: number;
-  next: any;
-  prev: any;
+  next: SnakeNode | null;
+  prev: SnakeNode | null;
 
-  constructor(coordY: number, coordX: number, next: any = undefined, prev: any = undefined) {
+  constructor(coordY: number, coordX: number, next: SnakeNode | null = null, prev: SnakeNode | null = null) {
     this.coordY = coordY;
     this.coordX = coordX;
     this.next = next;
@@ -46,7 +46,7 @@ export class SnakeList {
   }
 
   isCellInSnake(coordY: number, coordX: number): boolean {
-    let curNode = this.head;
+    let curNode: SnakeNode | null = this.head;
     while (curNode) {
       if (curNode.coordY === coordY && curNode.coordX === coordX)
         return true;

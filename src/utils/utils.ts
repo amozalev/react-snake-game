@@ -13,14 +13,14 @@ export enum GAME_MODE {
 
 export const ALLOWED_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'])
 
-export const createInitCells = (height: number, width: number) =>
+export const createInitCells = (height: number, width: number): string[][] =>
   Array(height).fill([]).map(row => row = Array(width).fill(CELLS.EMPTY));
 
 
 export const getRandomCellCoords = (height: number, width: number): [number, number] =>
   [Math.floor(Math.random() * height), Math.floor(Math.random() * width)];
 
-export const createFoodCell = (gameHeight: number, gameWidth: number, cells: any) => {
+export const createFoodCell = (gameHeight: number, gameWidth: number, cells: string[][]): number[] => {
   let [foodCoordY, foodCoordX] = getRandomCellCoords(gameHeight, gameWidth);
   while (cells[foodCoordY][foodCoordX] !== CELLS.EMPTY) {
     [foodCoordY, foodCoordX] = getRandomCellCoords(gameHeight, gameWidth);
@@ -28,7 +28,7 @@ export const createFoodCell = (gameHeight: number, gameWidth: number, cells: any
   return [foodCoordY, foodCoordX];
 }
 
-export const getNextSnakeCoordsByKey = (gameHeight: number, gameWidth: number, key: string, snake: SnakeList, gameMode: GAME_MODE) => {
+export const getNextSnakeCoordsByKey = (gameHeight: number, gameWidth: number, key: string, snake: SnakeList, gameMode: GAME_MODE): number[] => {
   let coordY = 0, coordX = 0;
   switch (key) {
     case 'ArrowUp':

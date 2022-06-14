@@ -27,14 +27,14 @@ export const Game: React.FC<GameProps> = ({
                                             restartGame,
                                             gameMode = GAME_MODE.HARD
                                           }) => {
-  const [cells, setCells] = useState(createInitCells(gameHeight, gameWidth));
+  const [cells, setCells] = useState<string[][]>(createInitCells(gameHeight, gameWidth));
   let keyRef = useRef<string | undefined>(useKeyboardEvent());
-  let key = useKeyboardEvent();
+  let key: string | undefined = useKeyboardEvent();
   keyRef.current = key && ALLOWED_KEYS.has(key) ? key : keyRef.current;
 
   let snakeRef = useRef<SnakeList>(new SnakeList(...getRandomCellCoords(gameHeight, gameWidth)));
   const snake = snakeRef.current;
-  const foodRef = useRef(createFoodCell(gameHeight, gameWidth, cells)) // used to create initial food only once => in strict mode Game rerenders twice during a mount
+  const foodRef = useRef<number[]>(createFoodCell(gameHeight, gameWidth, cells)) // used to create initial food only once => in strict mode Game rerenders twice during a mount
   const [initFoodCoordY, initFoodCoordX] = foodRef.current;
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export const Game: React.FC<GameProps> = ({
     return () => clearInterval(interval)
   }, [keyRef.current, cells])
 
-  const checkIfLostGame = (nextCoordY: number, nextCoordX: number, gameHeight: number, gameWidth: number, interval: NodeJS.Timer) => {
+  const checkIfLostGame = (nextCoordY: number, nextCoordX: number, gameHeight: number, gameWidth: number, interval: NodeJS.Timer): void => {
     if (snake.isCellInSnake(nextCoordY, nextCoordX) || nextCoordY < 0 || nextCoordY >= gameHeight || nextCoordX < 0 || nextCoordX >= gameWidth) {
       clearInterval(interval)
       alert('You have lost!');
