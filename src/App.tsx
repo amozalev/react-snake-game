@@ -9,7 +9,7 @@ function App() {
   const height = 10;
   const width = 10;
   const gameSpeed = 100;
-  const gameMode: GAME_MODE = GAME_MODE.HARD
+  const gameMode: GAME_MODE = GAME_MODE.EASY
 
   return <Game key={key} gameHeight={height} gameWidth={width} gameSpeed={gameSpeed} restartGame={setKey} gameMode={gameMode}/>
 }

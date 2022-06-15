@@ -38,9 +38,10 @@ export const Game: React.FC<GameProps> = ({
   const [initFoodCoordY, initFoodCoordX] = foodRef.current;
 
   useEffect(() => {
-    cells[snake.head.coordY][snake.head.coordX] = CELLS.SNAKE;
-    cells[initFoodCoordY][initFoodCoordX] = CELLS.FOOD;
-    setCells([...cells])
+    const cellsCopy = [...cells];
+    cellsCopy[snake.head.coordY][snake.head.coordX] = CELLS.SNAKE;
+    cellsCopy[initFoodCoordY][initFoodCoordX] = CELLS.FOOD;
+    setCells(cellsCopy);
   }, [])
 
   useEffect(() => {
@@ -53,14 +54,15 @@ export const Game: React.FC<GameProps> = ({
         const isFoodCell = cells[nextCoordY][nextCoordX] === CELLS.FOOD
         const poppedNode = snake.move(nextCoordY, nextCoordX, isFoodCell);
 
+        const cellsCopy = [...cells];
         if (poppedNode) {
-          cells[poppedNode.coordY][poppedNode.coordX] = CELLS.EMPTY;
+          cellsCopy[poppedNode.coordY][poppedNode.coordX] = CELLS.EMPTY;
         } else {
-          const [foodCoordY, foodCoordX] = createFoodCell(gameHeight, gameWidth, cells);
-          cells[foodCoordY][foodCoordX] = CELLS.FOOD;
+          const [foodCoordY, foodCoordX] = createFoodCell(gameHeight, gameWidth, cellsCopy);
+          cellsCopy[foodCoordY][foodCoordX] = CELLS.FOOD;
         }
-        cells[nextCoordY][nextCoordX] = CELLS.SNAKE;
-        setCells([...cells]);
+        cellsCopy[nextCoordY][nextCoordX] = CELLS.SNAKE;
+        setCells(cellsCopy);
       }
     }, gameSpeed)
     return () => clearInterval(interval)
